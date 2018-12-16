@@ -26,9 +26,14 @@ public class CharectarMovement : MonoBehaviour {
 
 	private int collectedObjects;
 
+	private int level = 1;
+
 	public Animator animator;
 	public GameObject charectarModel;
 	public TextMeshProUGUI Collectedferns;
+	public GameObject shelter;
+	public TextMeshProUGUI VictoryText;
+	public Camera PlayerCamera;
 
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
@@ -37,20 +42,21 @@ public class CharectarMovement : MonoBehaviour {
 	void OnTriggerStay2D(Collider2D other) {
 		if (other.gameObject.GetComponent<CollectObject>() != null) {
 			collidedObject = other.gameObject;
-		} else {
-			return;
+		} else if (other.gameObject.GetComponent<PlantObject>() != null) {
+			collidedObject = other.gameObject;
 		}
 	}
 	void OnTriggerExit2D(Collider2D other) {
 		if (other.gameObject.GetComponent<CollectObject>() != null) {
 			collidedObject = null;
-		} else {
-			return;
+		} else if (other.gameObject.GetComponent<PlantObject>() != null) {
+			collidedObject = null;
 		}
 	}
 
 	void Update()
 	{
+		//Code That is always relevent
 		if (isGround) {
 			jumps = extraJumps;
 		}
@@ -60,10 +66,35 @@ public class CharectarMovement : MonoBehaviour {
 		} else if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)|| Input.GetKeyDown(KeyCode.Space)) && jumps == 0 && isGround) {
 			rb.velocity = Vector2.up * jumpForce;
 		}
-		if (Input.GetKeyDown(KeyCode.E) && collidedObject != null) {
+
+		if (Input.GetKeyDown(KeyCode.E) && collidedObject != null && collidedObject.GetComponent<CollectObject>() != null) {
 			Destroy(collidedObject.gameObject);
 			collectedObjects++;
 			Collectedferns.text = collectedObjects.ToString();
+		}
+		//Level Specific Code
+		if (level == 1) {
+			PlayerCamera.orthographicSize = 0.75f;
+			 if (Input.GetKeyDown(KeyCode.E) && collidedObject != null && collidedObject.GetComponent<PlantObject>() != null) {
+				if (collectedObjects == 6) {
+					shelter.SetActive(true);
+					VictoryText.gameObject.SetActive(true);
+					extraJumps = 0;
+					collectedObjects = 0;
+					level++;
+				}
+			}
+		}
+		if (level==2) {
+			PlayerCamera.orthographicSize = 1f;
+			if (Input.GetKeyDown(KeyCode.E) && collidedObject != null && collidedObject.GetComponent<PlantObject>() != null) {
+				if (collectedObjects == 10) {
+					shelter.SetActive(true);
+					VictoryText.text = "You have now unlocked the pickaxe";
+					extraJumps = 1;
+					collectedObjects = 0;
+				}
+			}
 		}
 	}
 
