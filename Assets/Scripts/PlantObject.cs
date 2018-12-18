@@ -4,13 +4,24 @@ using UnityEngine;
 
 public class PlantObject : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
+	public SpriteRenderer shelter;
+	public Sprite seed;
+	public Sprite sprout;
+	public Sprite fernShelter;
+	public Sprite branchShelter;
+
+	public void SetShelterActive(bool setActive) {
+		shelter.gameObject.SetActive(setActive);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	public void SetShelterSprite(int level){
+		if (level== 1) {
+			shelter.sprite = fernShelter;
+			this.GetComponent<SpriteRenderer>().sprite = seed;
+		} else {
+			shelter.sprite = branchShelter;
+			this.GetComponent<SpriteRenderer>().sprite = sprout;
+		}
 	}
+
 }
