@@ -30146,8 +30146,8 @@ MonoBehaviour:
     m_Bits: 256
   extraJumps: 1
   jumpTime: 0.3
-  haveJumpRest: 1
-  restTime: 0.5
+  haveJumpRest: 0
+  restTime: 0.1
   animator: {fileID: 351305259}
   charectarModel: {fileID: 351305254}
 --- !u!50 &875565113
