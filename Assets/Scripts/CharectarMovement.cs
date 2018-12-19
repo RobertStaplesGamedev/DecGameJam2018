@@ -101,39 +101,35 @@ public class CharectarMovement : MonoBehaviour {
 		}
 
 		if (Input.GetButtonDown("Jump")) {
-			if (haveJumpRest) {
-				if (restTimeCounter < 0) {
-					if (jumps > 0) {
-						isJumping = true;
-						jumpTimeCounter = jumpTime;
-						Debug.Log(jumps);
-						jumps--;
-					} 	else if (jumps == 0) {
-						isJumping = true;
-						jumpTimeCounter = jumpTime;
-						jumps--;
-					}
-				}
-			} else {
-				if (jumps > 0) {
-					isJumping = true;
-					jumpTimeCounter = jumpTime;
-					Debug.Log(jumps);
-					jumps--;
-				}	else if (jumps == 0) {
-					isJumping = true;
-					jumpTimeCounter = jumpTime;
-					jumps--;
-				}
+			if (jumps > 0) {
+				isJumping = true;
+				jumpTimeCounter = jumpTime;
+				jumps--;
+			} 
+			else if (jumps == 0) {
+				isJumping = true;
+				jumpTimeCounter = jumpTime;
+				jumps--;
 			}
 		} 
 		
 		if (Input.GetButton("Jump") && isJumping && jumps >= 0) {
-			if (jumpTimeCounter > 0) {
-				rb.velocity = Vector2.up * jumpForce;
-				jumpTimeCounter -= Time.deltaTime;
+			if (haveJumpRest) {
+				if (restTimeCounter < 0) {
+					if (jumpTimeCounter > 0) {
+						rb.velocity = Vector2.up * jumpForce;
+						jumpTimeCounter -= Time.deltaTime;
+					} else {
+						isJumping = false;
+					}
+				}
 			} else {
-				isJumping = false;
+				if (jumpTimeCounter > 0) {
+					rb.velocity = Vector2.up * jumpForce;
+					jumpTimeCounter -= Time.deltaTime;
+				} else {
+					isJumping = false;
+				}
 			}
 		}
 
