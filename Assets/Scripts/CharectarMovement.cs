@@ -6,117 +6,57 @@ using TMPro;
 
 public class CharectarMovement : MonoBehaviour {
 
-	bool isGround;
-	bool isRight = true;
+	[HideInInspector] public GameObject collidedObject;
 
-	GameObject collidedObject;
 
+	[Header("Moving")]
 	public float moveSpeed = 40f;
 	public float jumpForce = 10f;
 	float moveInput;
+	bool isRight = true;
 
 	Rigidbody2D rb;
 
+	[Header("Jumping")]
+	bool isGround;
+	bool isJumping;
 	public Transform groundCheck;
 	public float checkRadius;
 	public LayerMask whatIsGround;
-
 	public int extraJumps = 1;
-	private int jumps = 1;
-
-	private int collectedObjects;
-	private bool resetVictoryText = false;
-	private int level = 1;
+	int jumps = 0;
+	public float jumpTime;
+	float jumpTimeCounter;
+	public bool haveJumpRest;
+	bool isRested = true;
+	public float restTime;
+	float restTimeCounter;
 
 	public Animator animator;
 	public GameObject charectarModel;
-	public TextMeshProUGUI CollectedObjectsNum;
-	public TextMeshProUGUI CollectedObjectsNumTotal;
-	public PlantObject seed;
-	public TextMeshProUGUI VictoryText;
-	public Camera PlayerCamera;
 
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
+		restTimeCounter = -1;
 	}
 
 	void OnTriggerStay2D(Collider2D other) {
-		if (other.gameObject.GetComponent<CollectObject>() != null) {
-			collidedObject = other.gameObject;
-		} else if (other.gameObject.GetComponent<PlantObject>() != null) {
+		if (other.gameObject != null) {
 			collidedObject = other.gameObject;
 		}
 	}
 	void OnTriggerExit2D(Collider2D other) {
-		if (other.gameObject.GetComponent<CollectObject>() != null) {
-			collidedObject = null;
-		} else if (other.gameObject.GetComponent<PlantObject>() != null) {
+		if (other.gameObject != null) {
 			collidedObject = null;
 		}
 	}
 
 	void Update()
 	{
-		//Code That is always relevent
-		if (isGround) {
-			jumps = extraJumps;
-		}
-		if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && jumps > 0 ) {
-			rb.velocity = Vector2.up * jumpForce;
-			jumps--;
-			if (resetVictoryText) {
-				ResetVictory();
-			}
-		} else if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)|| Input.GetKeyDown(KeyCode.Space)) && jumps == 0 && isGround) {
-			rb.velocity = Vector2.up * jumpForce;
-			if (resetVictoryText) {
-				ResetVictory();
-			}
-		}
-
-		if (Input.GetKeyDown(KeyCode.E) && collidedObject != null && collidedObject.GetComponent<CollectObject>() != null) {
-			Destroy(collidedObject.gameObject);
-			collectedObjects++;
-			CollectedObjectsNum.text = collectedObjects.ToString();
-		}
-		//Level Specific Code
-		if (level == 1) {
-			PlayerCamera.orthographicSize = 0.75f;
-			 if (Input.GetKeyDown(KeyCode.E) && collidedObject != null && collidedObject.GetComponent<PlantObject>() != null) {
-				if (collectedObjects == 6) {
-					seed.SetShelterSprite(level);
-					seed.SetShelterActive(true);
-					VictoryText.gameObject.SetActive(true);
-					extraJumps = 1;
-					collectedObjects = 0;
-					CollectedObjectsNum.text = collectedObjects.ToString();
-					level++;
-					resetVictoryText = true;
-				}
-			}
-		}
-		if (level==2) {
-			CollectedObjectsNumTotal.text = "/10";
-			if (collectedObjects == 1) {
-				seed.SetShelterActive(false);
-				seed.SetShelterSprite(level);
-			}
-			PlayerCamera.orthographicSize = 1f;
-			if (Input.GetKeyDown(KeyCode.E) && collidedObject != null && collidedObject.GetComponent<PlantObject>() != null) {
-				if (collectedObjects == 10) {
-					seed.SetShelterSprite(level);
-					seed.SetShelterActive(true);
-					VictoryText.gameObject.SetActive(true);
-					VictoryText.text = "You have now unlocked the pickaxe";
-					collectedObjects = 0;
-				}
-			}
-		}
+		Jump();
 	}
 
 	void FixedUpdate () {
-
-		isGround = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
 
 		animator.SetBool("isGround", isGround);
 
@@ -137,14 +77,77 @@ public class CharectarMovement : MonoBehaviour {
 
 		animator.SetBool("isMoving", isMoving);
 	}
+
+	void Jump() {
+
+		isGround = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+
+		if (isGround) {
+			if (haveJumpRest) {
+				if (restTimeCounter < 0) {
+					restTimeCounter = restTime;
+					isRested = true;
+					jumps = extraJumps;
+					jumpTimeCounter = jumpTime;
+				} else if (restTimeCounter > 0 && !isRested) {
+					restTimeCounter -= Time.deltaTime;
+				}
+			} else {
+				jumps = extraJumps;
+				jumpTimeCounter = jumpTime;
+			}
+		}
+
+		if (Input.GetButtonDown("Jump")) {
+			if (jumps > 0) {
+				isJumping = true;
+				jumpTimeCounter = jumpTime;
+			} 
+			else if (jumps == 0) {
+				isJumping = true;
+				jumpTimeCounter = jumpTime;
+			}
+		} 
+		
+		if (Input.GetButton("Jump") && isJumping && jumps >= 0) {
+			if (haveJumpRest) {
+				if (isRested) {
+					if (jumpTimeCounter > 0) {
+						rb.velocity = Vector2.up * jumpForce;
+						jumpTimeCounter -= Time.deltaTime;
+					} else {
+						isJumping = false;
+					}
+				}
+			} else {
+				if (jumpTimeCounter > 0) {
+					rb.velocity = Vector2.up * jumpForce;
+					jumpTimeCounter -= Time.deltaTime;
+				} else {
+					isJumping = false;
+				}
+			}
+		}
+
+		if (Input.GetButtonUp("Jump")) {
+			if (jumps < 0) {
+				isRested = false;
+				isJumping = false;
+			} else if (jumps >= 0) {
+				jumps--;
+			}
+		}
+	}
+
 	void Flip() {
 		isRight = !isRight;
 		Vector3 scaler = charectarModel.transform.localScale;
 		scaler.x *= -1f;
 		charectarModel.transform.localScale = scaler;
 	}
-	void ResetVictory() {
-		VictoryText.gameObject.SetActive(false);
-		resetVictoryText = false;
+	void OnDrawGizmosSelected(){
+		Gizmos.color = Color.blue;
+		Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
+
 	}
 }
