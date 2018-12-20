@@ -1944,6 +1944,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 985c61c35b2d00f49b9e23a21cfb1d2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 10
+  speed: 1
 --- !u!213 &111952932
 Sprite:
   m_ObjectHideFlags: 0
@@ -30334,11 +30336,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0c184ff388c56468e63dada58b019e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBtwAttack: 0.3
-  startTimeBtwAttack: 0
+  startTimeBtwAttack: 0.3
   attackPos: {fileID: 1229964433}
   attackRange: 0.05
-  damage: 1
+  damage: 3
   whatIsEnemies:
     serializedVersion: 2
     m_Bits: 1024

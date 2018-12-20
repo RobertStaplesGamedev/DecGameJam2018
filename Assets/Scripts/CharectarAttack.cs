@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharectarAttack : MonoBehaviour {
-    public float timeBtwAttack;
+    float timeBtwAttack;
     public float startTimeBtwAttack;
 
     public Transform attackPos;
