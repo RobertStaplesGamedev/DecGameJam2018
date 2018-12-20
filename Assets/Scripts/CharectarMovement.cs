@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class CharectarMovement : MonoBehaviour {
 
@@ -28,6 +26,7 @@ public class CharectarMovement : MonoBehaviour {
 	public float jumpTime;
 	float jumpTimeCounter;
 	public bool haveJumpRest;
+	bool isRested = true;
 	public float restTime;
 	float restTimeCounter;
 
@@ -36,7 +35,7 @@ public class CharectarMovement : MonoBehaviour {
 
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
-		restTimeCounter = restTime;
+		restTimeCounter = -1;
 	}
 
 	void OnTriggerStay2D(Collider2D other) {
@@ -84,18 +83,15 @@ public class CharectarMovement : MonoBehaviour {
 		if (isGround) {
 			if (haveJumpRest) {
 				if (restTimeCounter < 0) {
-					if (!isJumping) {
-						restTimeCounter = restTime;
-					}
+					restTimeCounter = restTime;
+					isRested = true;
 					jumps = extraJumps;
-					isJumping = true;
 					jumpTimeCounter = jumpTime;
-				} else if (restTimeCounter > 0) {
+				} else if (restTimeCounter > 0 && !isRested) {
 					restTimeCounter -= Time.deltaTime;
 				}
 			} else {
 				jumps = extraJumps;
-				isJumping = true;
 				jumpTimeCounter = jumpTime;
 			}
 		}
@@ -104,18 +100,16 @@ public class CharectarMovement : MonoBehaviour {
 			if (jumps > 0) {
 				isJumping = true;
 				jumpTimeCounter = jumpTime;
-				jumps--;
 			} 
 			else if (jumps == 0) {
 				isJumping = true;
 				jumpTimeCounter = jumpTime;
-				jumps--;
 			}
 		} 
 		
 		if (Input.GetButton("Jump") && isJumping && jumps >= 0) {
 			if (haveJumpRest) {
-				if (restTimeCounter < 0) {
+				if (isRested) {
 					if (jumpTimeCounter > 0) {
 						rb.velocity = Vector2.up * jumpForce;
 						jumpTimeCounter -= Time.deltaTime;
@@ -135,7 +129,10 @@ public class CharectarMovement : MonoBehaviour {
 
 		if (Input.GetButtonUp("Jump")) {
 			if (jumps < 0) {
+				isRested = false;
 				isJumping = false;
+			} else if (jumps >= 0) {
+				jumps--;
 			}
 		}
 	}
