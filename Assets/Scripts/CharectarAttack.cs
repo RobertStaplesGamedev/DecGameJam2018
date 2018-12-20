@@ -9,20 +9,20 @@ public class CharectarAttack : MonoBehaviour {
     public Transform attackPos;
     public float attackRange;
     public int damage;
+    public bool knockback;
 
     public LayerMask whatIsEnemies;
 
     void Update() {
 
         if (timeBtwAttack <=0) {
-            if (Input.GetKey("q")) {
+            if (Input.GetKey(KeyCode.Space)) {
                 Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
                 for (int i = 0; i< enemiesToDamage.Length; i++) {
-                    enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(damage);
+                    enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(this.gameObject, 100, damage, knockback);
                 }
+                timeBtwAttack = startTimeBtwAttack;
             }
-
-            timeBtwAttack = startTimeBtwAttack;
         } else {
             timeBtwAttack -= Time.deltaTime;
         }
