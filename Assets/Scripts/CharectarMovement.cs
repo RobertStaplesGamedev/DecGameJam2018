@@ -5,7 +5,9 @@ using UnityEngine;
 public class CharectarMovement : MonoBehaviour {
 
 	[HideInInspector] public GameObject collidedObject;
-
+	[Header("Model")]
+	public Animator animator;
+	public GameObject charectarModel;
 
 	[Header("Moving")]
 	public float moveSpeed = 40f;
@@ -16,9 +18,9 @@ public class CharectarMovement : MonoBehaviour {
 	Rigidbody2D rb;
 
 	[Header("Jumping")]
+	public Transform groundCheck;
 	bool isGround;
 	bool isJumping;
-	public Transform groundCheck;
 	public float checkRadius;
 	public LayerMask whatIsGround;
 	public int extraJumps = 1;
@@ -29,9 +31,6 @@ public class CharectarMovement : MonoBehaviour {
 	bool isRested = true;
 	public float restTime;
 	float restTimeCounter;
-
-	public Animator animator;
-	public GameObject charectarModel;
 
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();

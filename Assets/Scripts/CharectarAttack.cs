@@ -19,7 +19,7 @@ public class CharectarAttack : MonoBehaviour {
             if (Input.GetKey(KeyCode.Space)) {
                 Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
                 for (int i = 0; i< enemiesToDamage.Length; i++) {
-                    enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(this.gameObject, 100, damage, knockback);
+                    enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(attackPos.gameObject, 100, damage, knockback);
                 }
                 timeBtwAttack = startTimeBtwAttack;
             }
