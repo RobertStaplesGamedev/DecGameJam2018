@@ -13,7 +13,7 @@ public class CharectarMovement : MonoBehaviour {
 	public float moveSpeed = 40f;
 	public float jumpForce = 10f;
 	float moveInput;
-	bool isRight = true;
+	float lookInput;
 
 	Rigidbody2D rb;
 
@@ -31,6 +31,11 @@ public class CharectarMovement : MonoBehaviour {
 	bool isRested = true;
 	public float restTime;
 	float restTimeCounter;
+
+	[HideInInspector] public bool isRight = true;
+	[HideInInspector] public bool isLookingup = false;
+	[HideInInspector] public bool isLookingdown = false;
+
 
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
@@ -50,6 +55,8 @@ public class CharectarMovement : MonoBehaviour {
 
 	void Update()
 	{
+		lookInput = Input.GetAxis("Vertical");
+		Look();
 		Jump();
 	}
 
@@ -58,6 +65,8 @@ public class CharectarMovement : MonoBehaviour {
 		animator.SetBool("isGround", isGround);
 
 		moveInput = Input.GetAxis("Horizontal");
+		
+
 		rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
 		if (isRight == false && moveInput > 0) {
 			Flip();
@@ -76,8 +85,20 @@ public class CharectarMovement : MonoBehaviour {
 		animator.SetBool("isMoving", isMoving);
 	}
 
+	void Look() {
+		if (lookInput > 0) {
+			isLookingup = true;
+			isLookingdown = false;
+		} else if (lookInput < 0) {
+			isLookingdown = true;
+			isLookingup = false;
+		} else {
+            isLookingdown = false;
+			isLookingup = false;
+		}
+	}
+
 	void Move() {
-		moveInput = Input.GetAxis("Horizontal");
 		rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
 		if (isRight == false && moveInput > 0) {
 			Flip();

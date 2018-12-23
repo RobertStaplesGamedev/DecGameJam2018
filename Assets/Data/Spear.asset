@@ -13,10 +13,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Spear
   attackShape: 1
-  xOffset: 0.76
+  xOffset: 0.18
   yOffset: 0
   attackRange: 0.5
-  horizontalRange: 1
+  horizontalRange: 0.7
   verticalRange: 0.3
   damage: 3
   knockback: 1
