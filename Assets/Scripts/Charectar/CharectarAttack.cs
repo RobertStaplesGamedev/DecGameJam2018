@@ -6,51 +6,71 @@ public class CharectarAttack : MonoBehaviour {
     float timeBtwAttack;
     public float startTimeBtwAttack;
 
-    public Transform attackPosHorizontal;
     Transform attackPos;
-    public Transform attackPosUp;
-    public Transform attackPosDown;
 
     int angle = 0;
     int looking = 0;
 
-    public Animator AttackAnimator;
+    Animator AttackAnimator;
     public Weapon weapon;
     public LayerMask whatIsEnemies;
+
+    [Header("Horizontal")]
+    public Transform horizontalAttackPos;
+    public Animator horizontalAnimator;
+
+    [Header("Up")]
+    public Transform upAttackPos;
+    public Animator upAnimator;
+
+    [Header("Down")]
+    public Transform downAttackPos;
+    public Animator downAnimator;
+
+    void Start() {
+        horizontalAnimator.runtimeAnimatorController = weapon.weaponAnimation;
+        upAnimator.runtimeAnimatorController = weapon.weaponAnimation;
+        downAnimator.runtimeAnimatorController = weapon.weaponAnimation;
+    }
+
 
     void Update() {
         bool isLookingdown = this.GetComponent<CharectarMovement>().isLookingdown;
         bool isLookingup = this.GetComponent<CharectarMovement>().isLookingup;
         bool isRight = this.GetComponent<CharectarMovement>().isRight;
         if (isLookingdown) {
-            attackPosHorizontal.gameObject.SetActive(false);
-            attackPosUp.gameObject.SetActive(false);
-            attackPosDown.gameObject.SetActive(true);
-            attackPos = attackPosDown;
+            horizontalAttackPos.gameObject.SetActive(false);
+            upAttackPos.gameObject.SetActive(false);
+            downAttackPos.gameObject.SetActive(true);
+            attackPos = downAttackPos;
             angle = 90;
            looking = 2;
+           AttackAnimator = downAnimator;
         } else if (isLookingup)
         {
-            attackPosHorizontal.gameObject.SetActive(false);
-            attackPosUp.gameObject.SetActive(true);
-            attackPosDown.gameObject.SetActive(false);
-            attackPos = attackPosUp;
+            horizontalAttackPos.gameObject.SetActive(false);
+            upAttackPos.gameObject.SetActive(true);
+            downAttackPos.gameObject.SetActive(false);
+            attackPos = upAttackPos;
             angle = 90;
             looking = 1;
+            AttackAnimator = upAnimator;
         } else if (!isRight){
-            attackPosHorizontal.gameObject.SetActive(true);
-            attackPosUp.gameObject.SetActive(false);
-            attackPosDown.gameObject.SetActive(false);
-            attackPos = attackPosHorizontal;
+            horizontalAttackPos.gameObject.SetActive(true);
+            upAttackPos.gameObject.SetActive(false);
+            downAttackPos.gameObject.SetActive(false);
+            attackPos = horizontalAttackPos;
             angle = 0;
             looking = 3;
+            AttackAnimator = horizontalAnimator;
         } else {
-            attackPosHorizontal.gameObject.SetActive(true);
-            attackPosUp.gameObject.SetActive(false);
-            attackPosDown.gameObject.SetActive(false);
-            attackPos = attackPosHorizontal;
+            horizontalAttackPos.gameObject.SetActive(true);
+            upAttackPos.gameObject.SetActive(false);
+            downAttackPos.gameObject.SetActive(false);
+            attackPos = horizontalAttackPos;
             angle = 0;
             looking = 0;
+            AttackAnimator = horizontalAnimator;
         }
 
         if (timeBtwAttack <=0) {
@@ -73,7 +93,7 @@ public class CharectarAttack : MonoBehaviour {
         if (attackPos) {
             attackPosTemp = attackPos;
         } else {
-            attackPosTemp = attackPosHorizontal;
+            attackPosTemp = horizontalAttackPos;
         }
         Vector2 center = weapon.SetAttackShape(attackPosTemp.position, angle, looking);
  

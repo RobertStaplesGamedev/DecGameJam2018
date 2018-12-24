@@ -9,14 +9,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81f289b994c6a411db7bfdc30283bd95, type: 3}
-  m_Name: Spear
+  m_Name: Sword
   m_EditorClassIdentifier: 
-  weaponName: Spear
-  attackShape: 1
-  xOffset: 0.18
-  yOffset: 0
+  weaponName: Sword
+  thrust: 0
+  weaponSprite: {fileID: 0}
+  weaponAnimation: {fileID: 9100000, guid: 5a7dfde3b9f1342bd8e2cf3acae64382, type: 2}
+  attackShape: 0
   attackRange: 0.5
-  horizontalRange: 0.7
-  verticalRange: 0.3
+  horizontalRange: 0
+  verticalRange: 0
+  xOffsetHorizontal: 0
+  yOffsetHorizontal: 0
+  xOffsetUp: 0
+  yOffsetUp: 0
+  xOffsetDown: 0
+  yOffsetDown: 0
   damage: 3
   knockback: 1

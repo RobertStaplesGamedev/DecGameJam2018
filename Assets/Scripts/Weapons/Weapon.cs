@@ -7,6 +7,8 @@ public class Weapon : ScriptableObject {
 	
 	public string weaponName;
 	public int thrust;
+	public Sprite weaponSprite;
+	public RuntimeAnimatorController weaponAnimation;
 
 	public enum AttackShape {Circle, Rectangle};
 	public AttackShape attackShape;
