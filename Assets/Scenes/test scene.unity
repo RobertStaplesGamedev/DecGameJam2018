@@ -122,7 +122,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2685350}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: AttackPosDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,7 +156,7 @@ GameObject:
   - component: {fileID: 209908379}
   - component: {fileID: 209908381}
   - component: {fileID: 209908380}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -346,7 +346,7 @@ GameObject:
   - component: {fileID: 319279075}
   - component: {fileID: 319279077}
   - component: {fileID: 319279076}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Attack Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -636,7 +636,7 @@ GameObject:
   - component: {fileID: 1659170611}
   - component: {fileID: 1659170612}
   - component: {fileID: 1659170613}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Attack Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -804,7 +804,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1717805090}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: AttackPosUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -835,7 +835,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1719671024}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: AttackPosHorizontal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -866,10 +866,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1771126960}
-  - component: {fileID: 1771126959}
   - component: {fileID: 1771126958}
+  - component: {fileID: 1771126959}
   - component: {fileID: 1771126957}
-  m_Layer: 0
+  - component: {fileID: 1771126961}
+  m_Layer: 11
   m_Name: MainCharectar_2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -914,8 +915,8 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 0.7
-  m_Material: {fileID: 6200000, guid: 70f5dfac032d3441194f33da5bb44c67, type: 2}
+  m_GravityScale: 0.5
+  m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -935,8 +936,8 @@ MonoBehaviour:
   collidedObject: {fileID: 0}
   animator: {fileID: 2146714914}
   charectarModel: {fileID: 2146714908}
-  moveSpeed: 2
-  jumpForce: 2
+  moveSpeed: 3
+  jumpForce: 3
   groundCheck: {fileID: 1794559700}
   checkRadius: 0.035
   whatIsGround:
@@ -957,7 +958,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1771126956}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.71, y: 2.24, z: 0}
+  m_LocalPosition: {x: -4.56, y: 2.24, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 209908378}
@@ -965,6 +966,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1771126961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1771126956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 437662ef4bc15ed4aaaa1f5db565eb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeBtwinvincible: 0
+  startTimeBtwinvincible: 3
+  health: 10
+  knockbackForce: 300
 --- !u!1 &1794559699
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,7 +990,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1794559700}
-  m_Layer: 31
+  m_Layer: 11
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1127,11 +1143,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 10
   model: {fileID: 1279052648}
-  speed: 1
+  speed: 3
   wallPatrol: 1
   groundPatrol: 1
   frontDetection: {fileID: 1693597328}
   wallDetectionDistance: 0.2
+  enemyDamage: 2
   canBeKnockedback: 1
   knockbackModifier: 0
   canBeDazed: 1
@@ -1154,7 +1171,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!58 &1915994513
 CircleCollider2D:
@@ -1195,7 +1212,7 @@ GameObject:
   - component: {fileID: 2055584163}
   - component: {fileID: 2055584164}
   - component: {fileID: 2055584165}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: AttackAnimation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1394,7 +1411,7 @@ GameObject:
   - component: {fileID: 2146714912}
   - component: {fileID: 2146714911}
   - component: {fileID: 2146714910}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CharectarModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

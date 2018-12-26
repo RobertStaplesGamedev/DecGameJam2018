@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour {
 	RaycastHit2D hitInfoGround;
 
 	[Header("Combat")]
+	public int enemyDamage;
 	public bool canBeKnockedback;
 	public float knockbackModifier;
 	public bool canBeDazed;
@@ -30,6 +31,13 @@ public class Enemy : MonoBehaviour {
 	float dazeTimeCountdown;
 	bool isDazed = false;
 	
+	Rigidbody2D rb;
+
+	void Start() {
+		rb = GetComponent<Rigidbody2D>();
+	}
+
+
 	void Update () {
 
 		if (health <= 0) {
@@ -51,7 +59,7 @@ public class Enemy : MonoBehaviour {
 					direction = Vector2.left;
 					Flip();
 				} else {
-					transform.Translate(Vector2.right * speed * Time.deltaTime);
+					rb.MovePosition(rb.position + (Vector2.right * speed * Time.fixedDeltaTime));
 				}
 			} else {
 				if ((hitInfoWall && hitInfoWall.transform.gameObject.layer == 9) || (!hitInfoGround && groundPatrol)) {
@@ -59,14 +67,14 @@ public class Enemy : MonoBehaviour {
 					direction = Vector2.right;
 					Flip();
 				} else {
-					transform.Translate(Vector2.left * speed * Time.deltaTime);
+					rb.MovePosition(rb.position + (Vector2.left * speed * Time.fixedDeltaTime));
 				}
 			}
 		} else {
 			if (dazeTimeCountdown < 0) {
 				isDazed = false;
 			} else {
-				dazeTimeCountdown -= Time.deltaTime;
+				dazeTimeCountdown -= Time.fixedDeltaTime;
 			}
 		}
 	}
@@ -80,13 +88,10 @@ public class Enemy : MonoBehaviour {
 		}
 		
 		dazeTimeCountdown = dazeTime;
-		//Debug.Log("damage taken");
 	}
 
 	void Knockback(GameObject source, int thrust) {
 		Vector2 direction = source.transform.position - this.transform.position;
-		float angle = Mathf.Atan2 (direction.y, direction.x);
-		direction = new Vector2 (Mathf.Cos (angle), Mathf.Sin (angle));
 		//left of the object
 		if (direction.x < 0 && direction.x < direction.y && direction.x < -direction.y) {
 			direction = Vector2.right;
@@ -103,11 +108,11 @@ public class Enemy : MonoBehaviour {
 		else if (direction.y > 0 && direction.x < direction.y && -direction.x < direction.y) {
 			direction = Vector2.down;
 		}
-		Debug.Log(direction);
 		if (knockbackModifier > 0) {
 			this.GetComponent<Rigidbody2D>().AddForce(direction * (thrust/knockbackModifier));
 		} else {
 			this.GetComponent<Rigidbody2D>().AddForce(direction * thrust);
+			Debug.Log(direction * thrust);
 		}
 	}
 	void Flip() {
@@ -120,5 +125,14 @@ public class Enemy : MonoBehaviour {
 		Gizmos.color = Color.red;
 		Gizmos.DrawRay(frontDetection.position, direction);
 		Gizmos.DrawRay(frontDetection.position, Vector2.down);
+	}
+
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		if (collision.gameObject.layer == 11 && collision.gameObject.GetComponent<CharectarDamage>().timeBtwinvincible <= 0)
+		{
+			collision.gameObject.GetComponent<CharectarDamage>().TakeDamage(this.gameObject, enemyDamage);
+			Physics2D.IgnoreLayerCollision(10, 11, true);
+		}
 	}
 }

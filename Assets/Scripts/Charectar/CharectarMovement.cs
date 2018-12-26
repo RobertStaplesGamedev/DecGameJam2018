@@ -66,23 +66,7 @@ public class CharectarMovement : MonoBehaviour {
 
 		moveInput = Input.GetAxis("Horizontal");
 		
-
-		rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
-		if (isRight == false && moveInput > 0) {
-			Flip();
-		} else if (isRight == true && moveInput < 0) {
-			Flip();
-		}
-		bool isMoving = false;
-		if (moveInput > 0.01f || moveInput < -0.01f) {
-			isMoving = true;
-		} else {
-			isMoving = false;
-		}
-		
 		Move();
-
-		animator.SetBool("isMoving", isMoving);
 	}
 
 	void Look() {

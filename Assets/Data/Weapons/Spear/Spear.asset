@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Spear
   m_EditorClassIdentifier: 
   weaponName: Spear
-  thrust: 0
+  thrust: 100
   weaponSprite: {fileID: 21300000, guid: 84f971f47273d6444aa7d033ee35cf5b, type: 3}
   weaponAnimation: {fileID: 9100000, guid: 3e48d0df58f6742469a0f8366eff552e, type: 2}
   attackShape: 1
