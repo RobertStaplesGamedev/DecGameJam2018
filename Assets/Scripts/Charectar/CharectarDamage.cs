@@ -31,13 +31,11 @@ public class CharectarDamage : MonoBehaviour {
 	}
 	void Knockback(GameObject source) {
 		Vector2 direction = this.transform.position - source.transform.position;
-		if (direction.x > 1) {
+		if (direction.x > 0) {
 			direction = (new Vector2(1,1) * knockbackForce);
-			rb.AddForce(direction);
 		} else {
 			direction = (new Vector2(-1,1) * knockbackForce);
-			rb.AddForce(direction);
 		}
-		Debug.Log(direction);
+		rb.velocity = direction;
 	}
 }

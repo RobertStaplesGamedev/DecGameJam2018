@@ -65,8 +65,9 @@ public class CharectarMovement : MonoBehaviour {
 		animator.SetBool("isGround", isGround);
 
 		moveInput = Input.GetAxis("Horizontal");
-		
-		Move();
+		if (moveInput > 0 || moveInput < 0) {
+			Move();
+		}
 	}
 
 	void Look() {
@@ -83,7 +84,10 @@ public class CharectarMovement : MonoBehaviour {
 	}
 
 	void Move() {
-		rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
+		if (rb.velocity.x < moveSpeed && rb.velocity.x > -moveSpeed) {
+			rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
+		}
+
 		if (isRight == false && moveInput > 0) {
 			Flip();
 		} else if (isRight == true && moveInput < 0) {
