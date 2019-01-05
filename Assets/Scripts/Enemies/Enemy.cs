@@ -101,7 +101,6 @@ public class Enemy : MonoBehaviour {
 
 	public void TakeDamage(GameObject source, int thrust, int damage, bool knockback) {
 		health -= damage;
-		Debug.Log("test");
 		if (knockback && canBeKnockedback) {
 			Knockback(source, thrust);
 		}

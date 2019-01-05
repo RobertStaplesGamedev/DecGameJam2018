@@ -34,35 +34,25 @@ float startTimeBtwThrows;
 		//x = (v*v)t+.5at
 		//v*v= x/t
 		
-		float vel = 10;
-		float xDistance = playerPos.x - this.transform.position.x;
-		// float xVel = xDistance / timeToTarget;
-		// xVel = Mathf.Sqrt(-xVel);
+		Vector2 velocity = VelocityCal(this.transform.position, playerPos, 1);
 
-		// float yDistance = playerPos.y - this.transform.position.y;
-		// float yVel = 0.5f * (this.GetComponent<Rigidbody2D>().gravityScale * timeToTarget);
-
-		// float angle = 0.5f * Mathf.Asin((this.GetComponent<Rigidbody2D>().gravityScale * xDistance) / (vel * vel));
-		// angle = Mathf.Atan(angle);
-		
-		// Debug.Log(angle);
-		// float xVel = vel * (Mathf.Sin(angle) * Mathf.Rad2Deg);
-		// //Debug.Log(xVel);
-		// float yVel = vel * (Mathf.Cos(angle) * Mathf.Rad2Deg);
-		// //Debug.Log(yVel);
-		Vector2 velocity = VelocityCal(this.transform.position, playerPos, Random.Range(0.5f, 2));
-		// //Debug.Log(velocity);
 		projectile.GetComponent<Rigidbody2D>().velocity = velocity;
 	}
 	Vector2 VelocityCal(Vector2 origin, Vector2 target, float t) {
+
 		Vector2 distance = target - origin;
 
-		float sX = distance.x;
+		float sX;
+		if (distance.x > 0) {
+			sX = distance.x - 0.5f;
+		} else {
+			sX = distance.x + 0.5f;
+		}
 		float sY = distance.y;
 
 		float vX = (sX / t);
 		float vY = sY / t + 0.5f * Mathf.Abs(Physics2D.gravity.y) * t;
-
+		
 		return new Vector2(vX,vY);
 	}
 }
