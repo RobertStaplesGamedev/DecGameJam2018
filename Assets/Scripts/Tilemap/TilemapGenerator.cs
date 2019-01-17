@@ -2,32 +2,33 @@ using UnityEngine;
 
 public class TilemapGenerator : MonoBehaviour {
 
-    public Texture2D map;
-    public Color colourOfEmptySpace;
-
-    public ColourToPrefab[] colourMappings;
+    Texture2D map;
+    TilemapSettings tilemapSettings;
 
     void Start() {
-        GenerateLevel();
+        GenerateLevel(tilemapSettings);
     }
-
-    void GenerateLevel() {
+    public TilemapGenerator(Texture2D _map, TilemapSettings _tilemapSettings) {
+        map = _map;
+        tilemapSettings = _tilemapSettings;
+    }
+    public void GenerateLevel(TilemapSettings tilemapSettings) {
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.width; y++) {
-                GenerateTile(x,y);
+                GenerateTile(tilemapSettings, x,y);
             }
         }
     }
 
-    void GenerateTile(int x, int y) {
+    void GenerateTile(TilemapSettings tilemapSettings, int x, int y) {
         Color pixelColour = map.GetPixel(x,y);
 
-        if (pixelColour.a == 0 || (colourOfEmptySpace != null && colourOfEmptySpace == pixelColour)) {
+        if (pixelColour.a == 0 || (tilemapSettings.colourOfEmptySpace != null && tilemapSettings.colourOfEmptySpace == pixelColour)) {
             //there is nothing here, return
             return;
         }
         
-        foreach (ColourToPrefab colourMapping in colourMappings) {
+        foreach (ColourToPrefab colourMapping in tilemapSettings.colourMappings) {
             if (colourMapping.colour.Equals(pixelColour)) {
                 Vector2 position = new Vector2(x,y);
                 Instantiate(colourMapping.prefab, position, Quaternion.identity, transform);
