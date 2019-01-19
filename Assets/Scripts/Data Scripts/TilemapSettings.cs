@@ -1,11 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "World/TilemapSettings")]
 public class TilemapSettings : UpdatableData {
     
-     public ColourToPrefab[] colourMappings;
-     public Color colourOfEmptySpace;
+    public ColourToPrefab[] colourMappings;
+    public Color colourOfEmptySpace;
 
 }
 [System.Serializable]
