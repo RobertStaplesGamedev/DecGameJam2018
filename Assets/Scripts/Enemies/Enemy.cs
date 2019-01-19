@@ -21,6 +21,11 @@ public class Enemy : MonoBehaviour {
 	public float wallDetectionDistance = 2f;
 	RaycastHit2D hitInfoWall;
 	RaycastHit2D hitInfoGround;
+	public bool detectPlayer;
+	public int playerCheckRadius = 0;
+	public LayerMask whatIsPlayer;
+	[HideInInspector] public GameObject player;
+
 
 	[Header("Combat")]
 	public int enemyDamage;
@@ -37,13 +42,28 @@ public class Enemy : MonoBehaviour {
 		rb = GetComponent<Rigidbody2D>();
 	}
 
+	void FixedUpdate() {
+		PlayerDetect();
+		Move();
+	}
 
 	void Update () {
-
 		if (health <= 0) {
 			Destroy(gameObject);
 		}
+	}
+	void PlayerDetect() {
+		if (detectPlayer) {
+			Collider2D playerCollider = Physics2D.OverlapCircle(this.transform.position, playerCheckRadius, whatIsPlayer);
+			if (playerCollider != null) {
+				player = playerCollider.gameObject;
+			} else {
+				player = null;
+			}
+		}
+	}
 
+	void Move() {
 		if (wallPatrol) {
 			hitInfoWall = Physics2D.Raycast(frontDetection.position, direction, wallDetectionDistance);
 		}
@@ -78,6 +98,7 @@ public class Enemy : MonoBehaviour {
 			}
 		}
 	}
+
 	public void TakeDamage(GameObject source, int thrust, int damage, bool knockback) {
 		health -= damage;
 		if (knockback && canBeKnockedback) {
@@ -112,7 +133,6 @@ public class Enemy : MonoBehaviour {
 			this.GetComponent<Rigidbody2D>().AddForce(direction * (thrust/knockbackModifier));
 		} else {
 			this.GetComponent<Rigidbody2D>().AddForce(direction * thrust);
-			Debug.Log(direction * thrust);
 		}
 	}
 	void Flip() {
@@ -123,8 +143,17 @@ public class Enemy : MonoBehaviour {
 
 	void OnDrawGizmosSelected() {
 		Gizmos.color = Color.red;
-		Gizmos.DrawRay(frontDetection.position, direction);
-		Gizmos.DrawRay(frontDetection.position, Vector2.down);
+		if (wallPatrol) {
+			Gizmos.DrawRay(frontDetection.position, direction);
+		}
+		if (groundPatrol) {
+			Gizmos.DrawRay(frontDetection.position, Vector2.down);
+		}
+
+		Gizmos.color = Color.blue;
+		if (detectPlayer) {
+			Gizmos.DrawWireSphere(this.transform.position, playerCheckRadius);
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D collision)
