@@ -7,14 +7,19 @@ public class ThrowingEnemy : MonoBehaviour {
 public Transform throwPos;
 public GameObject projectilePrefab;
 public int damage;
+public Animator animator;
 
+public Sprite sittingSprite;
 
 public float timeBtwThrows;
 float startTimeBtwThrows;
 	
-	void Start() {
 
-	}
+bool isSitting = false;
+
+	// void Start() {
+	// 	Debug.Log(this.GetComponentInChildren<SpriteRenderer>().sprite.name);
+	// }
 
 	// Update is called once per frame
 	void FixedUpdate () {
@@ -22,7 +27,23 @@ float startTimeBtwThrows;
 			ThrowAtplayer(this.GetComponent<Enemy>().player.transform.position);
 			startTimeBtwThrows = timeBtwThrows;
 		} else {
+
 			startTimeBtwThrows -= Time.fixedDeltaTime;
+		}
+
+		if (this.GetComponent<Enemy>().player != null) {
+			if (!isSitting) {
+				// animator.Play("Sit");
+				// animator.SetBool("canSeePlayer", true);
+				//this.GetComponentInChildren<Animation>().Play("Sit");
+				//this.GetComponentInChildren<SpriteRenderer>().sprite = sittingSprite;
+			}
+			isSitting = true;
+		} else {
+			if (isSitting) {
+				// animator.SetBool("canSeePlayer", false);
+			}
+			isSitting = false;
 		}
 	}
 
