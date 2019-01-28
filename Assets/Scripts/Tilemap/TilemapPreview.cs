@@ -7,7 +7,7 @@ public class tilePreview : MonoBehaviour {
     public TilemapSettings tilemapSettings;
     public Texture2D map;
 
-    public void DrawTilemapInEditor() {
+    public void GenerateLevel() {
             TilemapGenerator Tilemap = new TilemapGenerator(map, tilemapSettings);
         }
 
@@ -15,7 +15,7 @@ public class tilePreview : MonoBehaviour {
     {
         if (!Application.isPlaying)
         {
-            DrawTilemapInEditor();
+            GenerateLevel();
         }
     }
 }

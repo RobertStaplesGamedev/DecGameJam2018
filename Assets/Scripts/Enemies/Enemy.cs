@@ -44,7 +44,7 @@ public class Enemy : MonoBehaviour {
 
 	void FixedUpdate() {
 		PlayerDetect();
-		Move();
+		//Move();
 	}
 
 	void Update () {
