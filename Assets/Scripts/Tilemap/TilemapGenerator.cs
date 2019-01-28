@@ -2,17 +2,19 @@ using UnityEngine;
 
 public class TilemapGenerator : MonoBehaviour {
 
+    public bool autoUpdate;
+
     Texture2D map;
     TilemapSettings tilemapSettings;
 
     void Start() {
-        GenerateLevel(tilemapSettings);
+        GenerateLevel();
     }
     public TilemapGenerator(Texture2D _map, TilemapSettings _tilemapSettings) {
         map = _map;
         tilemapSettings = _tilemapSettings;
     }
-    public void GenerateLevel(TilemapSettings tilemapSettings) {
+    public void GenerateLevel() {
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.width; y++) {
                 GenerateTile(tilemapSettings, x,y);

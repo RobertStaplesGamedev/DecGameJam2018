@@ -11,13 +11,13 @@ public class TilemapGeneratorEditor : Editor {
         {
             if (tilemapGenerator.autoUpdate)
             {
-                tilemapGenerator.DrawMapInEditor();
+                tilemapGenerator.GenerateLevel();
             }
         }
 
         if (GUILayout.Button("Generate"))
         {
-            tilemapGenerator.DrawMapInEditor();
+            tilemapGenerator.GenerateLevel();
         }
     }
 }
