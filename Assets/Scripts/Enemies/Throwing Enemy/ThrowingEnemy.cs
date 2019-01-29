@@ -23,7 +23,7 @@ bool isSitting = false;
 
 	// Update is called once per frame
 	void FixedUpdate () {
-		if (startTimeBtwThrows < 0 && this.GetComponent<Enemy>().player != null) {
+		if (startTimeBtwThrows < 0 && enemySettings.player != null) {
 			ThrowAtplayer(this.GetComponent<Enemy>().player.transform.position);
 			startTimeBtwThrows = timeBtwThrows;
 		} else {

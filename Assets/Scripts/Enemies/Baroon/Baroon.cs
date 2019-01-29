@@ -25,7 +25,7 @@ public class Baroon : MonoBehaviour {
 
     void Start() {
         rb = this.GetComponent<Rigidbody2D>();
-        direction = new Vector2(xStartDirection * enemyScript.speed,yStartDirection * enemyScript.speed);
+        direction = new Vector2(xStartDirection * enemyScript.enemysettings.speed,yStartDirection * enemyScript.enemysettings.speed);
         rb.velocity = direction;
         DrawPatrolBox();
     }
@@ -68,9 +68,9 @@ public class Baroon : MonoBehaviour {
     }
 
     void Flip() {
-		Vector3 scaler = enemyScript.model.transform.localScale;
+		Vector3 scaler = enemyScript.enemysettings.model.transform.localScale;
 		scaler.x *= -1f;
-		enemyScript.model.transform.localScale = scaler;
+		enemyScript.enemysettings.model.transform.localScale = scaler;
 
 	}
 
