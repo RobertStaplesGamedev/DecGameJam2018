@@ -12,10 +12,6 @@ public class Enemy : MonoBehaviour {
 		rb = GetComponent<Rigidbody2D>();
 	}
 
-	void FixedUpdate() {
-		enemysettings.PlayerDetect(this.gameObject);
-	}
-
 	void Update () {
 		if (enemysettings.health <= 0) {
 			Destroy(gameObject);
@@ -59,8 +55,7 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter2D(Collision2D collision)
-	{
+	void OnCollisionEnter2D(Collision2D collision) {
 		if (collision.gameObject.layer == 11 && collision.gameObject.GetComponent<CharectarDamage>().timeBtwinvincible <= 0)
 		{
 			collision.gameObject.GetComponent<CharectarDamage>().TakeDamage(this.gameObject, enemysettings.damage);

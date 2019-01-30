@@ -13,12 +13,6 @@ public class EnemySettings : UpdatableData {
 	public Vector2 direction;
 	public float speed;
 
-    [Header("Patrol")]
-    public bool detectPlayer;
-	public int playerCheckRadius = 0;
-	public LayerMask whatIsPlayer;
-    [HideInInspector] public GameObject player;
-
     [Header("Combat")]
 	public int damage;
 	public bool canBeKnockedback;
@@ -28,14 +22,4 @@ public class EnemySettings : UpdatableData {
 	public float dazeTimeCountdown;
 	public bool isDazed = false;
 
-    public void PlayerDetect(GameObject Detector) {
-		if (detectPlayer) {
-			Collider2D playerCollider = Physics2D.OverlapCircle(Detector.transform.position, playerCheckRadius, whatIsPlayer);
-			if (playerCollider != null) {
-				player = playerCollider.gameObject;
-			} else {
-				player = null;
-			}
-		}
-	}
 }

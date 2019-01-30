@@ -13,9 +13,6 @@ public class RollingEnemy : MonoBehaviour {
 	public float wallDetectionDistance = 2f;
 	RaycastHit2D hitInfoWall;
 	RaycastHit2D hitInfoGround;
-	public bool detectPlayer;
-	public int playerCheckRadius = 0;
-	public LayerMask whatIsPlayer;
 	
 	Rigidbody2D rb;
 
@@ -24,7 +21,6 @@ public class RollingEnemy : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		enemyScript.enemysettings.PlayerDetect(this.gameObject);
 		Move();
 	}
 
@@ -83,20 +79,6 @@ public class RollingEnemy : MonoBehaviour {
 		}
 		if (groundPatrol) {
 			Gizmos.DrawRay(frontDetection.position, Vector2.down);
-		}
-
-		Gizmos.color = Color.blue;
-		if (detectPlayer) {
-			Gizmos.DrawWireSphere(this.transform.position, playerCheckRadius);
-		}
-	}
-
-	void OnCollisionEnter2D(Collision2D collision)
-	{
-		if (collision.gameObject.layer == 11 && collision.gameObject.GetComponent<CharectarDamage>().timeBtwinvincible <= 0)
-		{
-			collision.gameObject.GetComponent<CharectarDamage>().TakeDamage(this.gameObject, enemyScript.enemysettings.enemyDamage);
-			Physics2D.IgnoreLayerCollision(10, 11, true);
 		}
 	}
 }
