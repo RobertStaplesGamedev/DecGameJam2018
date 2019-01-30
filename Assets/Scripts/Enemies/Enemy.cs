@@ -12,10 +12,6 @@ public class Enemy : MonoBehaviour {
 		rb = GetComponent<Rigidbody2D>();
 	}
 
-	void FixedUpdate() {
-		enemysettings.PlayerDetect(this.gameObject);
-	}
-
 	void Update () {
 		if (enemysettings.health <= 0) {
 			Destroy(gameObject);
