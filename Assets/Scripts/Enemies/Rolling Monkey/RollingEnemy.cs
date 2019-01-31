@@ -13,11 +13,19 @@ public class RollingEnemy : MonoBehaviour {
 	public float wallDetectionDistance = 2f;
 	RaycastHit2D hitInfoWall;
 	RaycastHit2D hitInfoGround;
-	
+
+	bool isMovingRight;
+
 	Rigidbody2D rb;
 
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
+		isMovingRight = enemyScript.enemysettings.movingRight;
+		if (isMovingRight) {
+			enemyScript.enemysettings.direction = Vector2.right;
+		} else {
+			enemyScript.enemysettings.direction = Vector2.left;
+		}
 	}
 
 	void FixedUpdate() {
@@ -40,21 +48,21 @@ public class RollingEnemy : MonoBehaviour {
 		}
 
 		if (!enemyScript.enemysettings.isDazed) {
-			if (enemyScript.enemysettings.movingRight) {
+			if (isMovingRight) {
 				if ((hitInfoWall && hitInfoWall.transform.gameObject.layer == 9) || (!hitInfoGround && groundPatrol)) {
-					enemyScript.enemysettings.movingRight = false;
+					isMovingRight = false;
 					enemyScript.enemysettings.direction = Vector2.left;
 					Flip();
 				} else {
-					rb.MovePosition(rb.position + (Vector2.right * enemyScript.enemysettings.speed * Time.fixedDeltaTime));
+					rb.MovePosition(rb.position + (enemyScript.enemysettings.direction * enemyScript.enemysettings.speed * Time.fixedDeltaTime));
 				}
 			} else {
 				if ((hitInfoWall && hitInfoWall.transform.gameObject.layer == 9) || (!hitInfoGround && groundPatrol)) {
-					enemyScript.enemysettings.movingRight = true;
+					isMovingRight = true;
 					enemyScript.enemysettings.direction = Vector2.right;
 					Flip();
 				} else {
-					rb.MovePosition(rb.position + (Vector2.left * enemyScript.enemysettings.speed * Time.fixedDeltaTime));
+					rb.MovePosition(rb.position + (enemyScript.enemysettings.direction * enemyScript.enemysettings.speed * Time.fixedDeltaTime));
 				}
 			}
 		} else {
@@ -67,15 +75,22 @@ public class RollingEnemy : MonoBehaviour {
 	}
 
 	void Flip() {
-		Vector3 scaler = enemyScript.enemysettings.model.transform.localScale;
+		Vector3 scaler = enemyScript.model.transform.localScale;
 		scaler.x *= -1f;
-		enemyScript.enemysettings.model.transform.localScale = scaler;
+		enemyScript.model.transform.localScale = scaler;
 	}
 
 	void OnDrawGizmosSelected() {
 		Gizmos.color = Color.red;
+		Vector2 directionDraw;
+		if (isMovingRight) {
+			directionDraw = Vector2.right;
+		} else {
+			directionDraw = Vector2.left;
+		}
+
 		if (wallPatrol) {
-			Gizmos.DrawRay(frontDetection.position, enemyScript.enemysettings.direction);
+			Gizmos.DrawRay(frontDetection.position, directionDraw);
 		}
 		if (groundPatrol) {
 			Gizmos.DrawRay(frontDetection.position, Vector2.down);

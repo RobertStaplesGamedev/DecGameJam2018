@@ -11,10 +11,12 @@ public class Bullet : MonoBehaviour {
 		{
 			collision.gameObject.GetComponent<CharectarDamage>().TakeDamage(this.gameObject, damage);
 			Physics2D.IgnoreLayerCollision(10, 11, true);
+			Destroy(this.gameObject);
 		} else if (collision.gameObject.layer == 10) {
 			Physics2D.IgnoreLayerCollision(10, 10, true);
+		} else {
+			Destroy(this.gameObject);
 		}
-		Destroy(this.gameObject);
 	}
 
 	void Update ()

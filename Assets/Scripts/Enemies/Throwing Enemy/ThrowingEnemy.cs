@@ -24,11 +24,11 @@ bool isSitting = false;
 
 	// Update is called once per frame
 	void FixedUpdate () {
+		PlayerDetect(throwPos.gameObject);
 		if (startTimeBtwThrows < 0 && playerDetect != null) {
 			ThrowAtplayer(playerDetect.transform.position);
 			startTimeBtwThrows = timeBtwThrows;
 		} else {
-
 			startTimeBtwThrows -= Time.fixedDeltaTime;
 		}
 
@@ -87,5 +87,11 @@ bool isSitting = false;
 		float vY = sY / t + 0.5f * Mathf.Abs(Physics2D.gravity.y) * t;
 		
 		return new Vector2(vX,vY);
+	}
+	void OnDrawGizmosSelected() {
+		Gizmos.color = Color.blue;
+		if (detectPlayer) {
+			Gizmos.DrawWireSphere(this.transform.position, playerCheckRadius);
+		}
 	}
 }

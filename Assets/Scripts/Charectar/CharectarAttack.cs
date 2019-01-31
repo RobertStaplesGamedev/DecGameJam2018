@@ -78,7 +78,7 @@ public class CharectarAttack : MonoBehaviour {
                 Collider2D[] enemiesToDamage = weapon.DrawAttackShape(attackPos.position, angle, whatIsEnemies, looking);
                 AttackAnimator.Play("Attack");
                 for (int i = 0; i< enemiesToDamage.Length; i++) {
-                    enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(attackPos.gameObject, this.gameObject, weapon.thrust, weapon.damage, weapon.knockback);
+                    enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(attackPos.gameObject, weapon.thrust, weapon.damage, weapon.knockback);
                 }
                 timeBtwAttack = startTimeBtwAttack;
             }

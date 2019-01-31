@@ -6,11 +6,10 @@ public class EnemySettings : UpdatableData {
    
     [Header("Enemy Basics")]
 	public int health;
-	public GameObject model;
 
 	[Header("Movement")]
 	public bool movingRight = false;
-	public Vector2 direction;
+	[HideInInspector] public Vector2 direction;
 	public float speed;
 
     [Header("Combat")]
@@ -19,7 +18,7 @@ public class EnemySettings : UpdatableData {
 	public float knockbackModifier;
 	public bool canBeDazed;
 	public float dazeTime;
-	public float dazeTimeCountdown;
-	public bool isDazed = false;
+	[HideInInspector] public float dazeTimeCountdown;
+	[HideInInspector] public bool isDazed = false;
 
 }

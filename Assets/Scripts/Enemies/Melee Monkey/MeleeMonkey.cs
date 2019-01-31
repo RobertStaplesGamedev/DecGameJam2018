@@ -24,8 +24,16 @@ public class MeleeMonkey : MonoBehaviour {
 
 	Rigidbody2D rb;
 
+	bool isMovingRight;
+
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
+		isMovingRight = enemyScript.enemysettings.movingRight;
+		if (isMovingRight) {
+			enemyScript.enemysettings.direction = Vector2.right;
+		} else {
+			enemyScript.enemysettings.direction = Vector2.left;
+		}
 	}
 
 	void FixedUpdate() {
@@ -47,21 +55,21 @@ public class MeleeMonkey : MonoBehaviour {
 		if ((enemyScript.enemysettings.canBeDazed && !enemyScript.enemysettings.isDazed) || !enemyScript.enemysettings.canBeDazed) {
 			if (playerAttack != null) {
 				Attack();
-			} else if (enemyScript.enemysettings.movingRight) {
-				if ((hitInfoWall && hitInfoWall.transform.gameObject.layer == 9) || !hitInfoGround) {
-					enemyScript.enemysettings.movingRight = false;
+			} else if (isMovingRight) {
+				if ((hitInfoWall && hitInfoWall.transform.gameObject.layer == 9) || !hitInfoGround || (playerDetect != null && playerDetect.transform.position.x < this.transform.position.x)) {
+					isMovingRight = false;
 					enemyScript.enemysettings.direction = Vector2.left;
 					Flip();
 				} else {
-					rb.MovePosition(rb.position + (Vector2.right * enemyScript.enemysettings.speed * Time.fixedDeltaTime));
+					rb.MovePosition(rb.position + (enemyScript.enemysettings.direction * enemyScript.enemysettings.speed * Time.fixedDeltaTime));
 				}
 			} else {
-				if ((hitInfoWall && hitInfoWall.transform.gameObject.layer == 9) || !hitInfoGround) {
-					enemyScript.enemysettings.movingRight = true;
+				if ((hitInfoWall && hitInfoWall.transform.gameObject.layer == 9) || !hitInfoGround || (playerDetect != null && playerDetect.transform.position.x > this.transform.position.x)) {
+					isMovingRight = true;
 					enemyScript.enemysettings.direction = Vector2.right;
 					Flip();
 				} else {
-					rb.MovePosition(rb.position + (Vector2.left * enemyScript.enemysettings.speed * Time.fixedDeltaTime));
+					rb.MovePosition(rb.position + (enemyScript.enemysettings.direction * enemyScript.enemysettings.speed * Time.fixedDeltaTime));
 				}
 			}
 		} else if (enemyScript.enemysettings.canBeDazed && enemyScript.enemysettings.isDazed) {
@@ -74,9 +82,9 @@ public class MeleeMonkey : MonoBehaviour {
 	}
 
 	void Flip() {
-		Vector3 scaler = enemyScript.enemysettings.model.transform.localScale;
+		Vector3 scaler = enemyScript.model.transform.localScale;
 		scaler.x *= -1f;
-		enemyScript.enemysettings.model.transform.localScale = scaler;
+		enemyScript.model.transform.localScale = scaler;
 	}
 
     public void PlayerDetect() {
@@ -95,12 +103,18 @@ public class MeleeMonkey : MonoBehaviour {
 		}
 	}
 
+	// public void PlayerDetect() {
+		
+	// }
+
 	public void Attack() {
 		if (timeBtwAttack <=0) {
 			//Play attack animation
-			Collider2D playerDamage = Physics2D.OverlapCircle(detector.transform.position, playerCheckRadius, whatIsPlayer);
-			playerDamage.GetComponent<CharectarDamage>().TakeDamage(this.gameObject, enemyScript.enemysettings.damage);
-			timeBtwAttack = startTimeBtwAttack;
+			Collider2D playerDamage = Physics2D.OverlapCircle(detector.transform.position, attackRadius, whatIsPlayer);
+			if (playerDamage.gameObject != null) {
+				playerDamage.gameObject.GetComponentInParent<CharectarDamage>().TakeDamage(this.gameObject, enemyScript.enemysettings.damage);
+				timeBtwAttack = startTimeBtwAttack;
+			}
         } else {
             timeBtwAttack -= Time.deltaTime;
 		}
@@ -115,6 +129,6 @@ public class MeleeMonkey : MonoBehaviour {
 		Gizmos.DrawWireSphere(this.transform.position, playerCheckRadius);
 
 		Gizmos.color = Color.red;
-		Gizmos.DrawWireSphere(this.transform.position, attackRadius);
+		Gizmos.DrawWireSphere(detector.transform.position, attackRadius);
 	}
 }

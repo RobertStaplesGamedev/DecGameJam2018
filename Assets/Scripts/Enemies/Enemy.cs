@@ -5,53 +5,57 @@ using UnityEngine;
 public class Enemy : MonoBehaviour {
 
 	public EnemySettings enemysettings;
-	
+	public GameObject model;
+
+	[HideInInspector] public int health;
+
 	Rigidbody2D rb;
 
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
+		health = enemysettings.health;
 	}
 
 	void Update () {
-		if (enemysettings.health <= 0) {
+		if (health <= 0) {
 			Destroy(gameObject);
 		}
 	}
 
-    public void TakeDamage(GameObject source, GameObject hitObject, int thrust, int damage, bool knockback) {
-		enemysettings.health -= damage;
+    public void TakeDamage(GameObject source, int thrust, int damage, bool knockback) {
+		health -= damage;
 		if (knockback && enemysettings.canBeKnockedback) {
-			EnemyKnockback(source, this.gameObject, thrust);
+			EnemyKnockback(source, thrust);
 		}
 		if (enemysettings.canBeDazed) {
-			enemysettings.isDazed	= true;
+			enemysettings.isDazed = true;
 		}
 		
 		enemysettings.dazeTimeCountdown = enemysettings.dazeTime;
 	}
 
-	public void EnemyKnockback(GameObject source, GameObject hitObject, int thrust) {
-		Vector2 knockbackDirection = source.transform.position - hitObject.transform.position;
+	public void EnemyKnockback(GameObject source, int thrust) {
+		Vector2 direction = source.transform.position - this.transform.position;
 		//left of the object
-		if (knockbackDirection.x < 0 && knockbackDirection.x < knockbackDirection.y && knockbackDirection.x < -knockbackDirection.y) {
-			knockbackDirection = Vector2.right;
+		if (direction.x < 0 && direction.x < direction.y && direction.x < -direction.y) {
+			direction = Vector2.right;
 		} 
 		//right of the object
-		else if (knockbackDirection.x > 0 && knockbackDirection.x > knockbackDirection.y && knockbackDirection.x > -knockbackDirection.y) {
-			knockbackDirection = Vector2.left;
+		else if (direction.x > 0 && direction.x > direction.y && direction.x > -direction.y) {
+			direction = Vector2.left;
 		}
 		//below of the object
-		else if (knockbackDirection.y < 0 && knockbackDirection.x > knockbackDirection.y && -knockbackDirection.x > knockbackDirection.y) {
-			knockbackDirection = Vector2.up;
+		else if (direction.y < 0 && direction.x > direction.y && -direction.x > direction.y) {
+			direction = Vector2.up;
 		}
 		//above of the object
-		else if (knockbackDirection.y > 0 && knockbackDirection.x < knockbackDirection.y && -knockbackDirection.x < knockbackDirection.y) {
-			knockbackDirection = Vector2.down;
+		else if (direction.y > 0 && direction.x < direction.y && -direction.x < direction.y) {
+			direction = Vector2.down;
 		}
 		if (enemysettings.knockbackModifier > 0) {
-			this.GetComponent<Rigidbody2D>().AddForce(knockbackDirection * (thrust/enemysettings.knockbackModifier));
+			rb.AddForce(direction * (thrust/enemysettings.knockbackModifier));
 		} else {
-			this.GetComponent<Rigidbody2D>().AddForce(knockbackDirection * thrust);
+			rb.AddForce(direction * thrust);
 		}
 	}
 
