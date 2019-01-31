@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   weaponName: Sword
-  thrust: 0
+  thrust: 50
   weaponSprite: {fileID: 0}
   weaponAnimation: {fileID: 9100000, guid: 5a7dfde3b9f1342bd8e2cf3acae64382, type: 2}
   attackShape: 0

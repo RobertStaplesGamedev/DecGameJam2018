@@ -9,29 +9,30 @@ public GameObject projectilePrefab;
 public int damage;
 public Animator animator;
 
+[Header("Patrol")]
+public bool detectPlayer;
+public int playerCheckRadius = 0;
+public LayerMask whatIsPlayer;
+[HideInInspector] public GameObject playerDetect;
+
 public Sprite sittingSprite;
 
 public float timeBtwThrows;
 float startTimeBtwThrows;
-	
 
 bool isSitting = false;
 
-	// void Start() {
-	// 	Debug.Log(this.GetComponentInChildren<SpriteRenderer>().sprite.name);
-	// }
-
 	// Update is called once per frame
 	void FixedUpdate () {
-		if (startTimeBtwThrows < 0 && this.GetComponent<Enemy>().player != null) {
-			ThrowAtplayer(this.GetComponent<Enemy>().player.transform.position);
+		PlayerDetect(throwPos.gameObject);
+		if (startTimeBtwThrows < 0 && playerDetect != null) {
+			ThrowAtplayer(playerDetect.transform.position);
 			startTimeBtwThrows = timeBtwThrows;
 		} else {
-
 			startTimeBtwThrows -= Time.fixedDeltaTime;
 		}
 
-		if (this.GetComponent<Enemy>().player != null) {
+		if (playerDetect != null) {
 			if (!isSitting) {
 				// animator.Play("Sit");
 				// animator.SetBool("canSeePlayer", true);
@@ -44,6 +45,17 @@ bool isSitting = false;
 				// animator.SetBool("canSeePlayer", false);
 			}
 			isSitting = false;
+		}
+	}
+
+	public void PlayerDetect(GameObject Detector) {
+		if (detectPlayer) {
+			Collider2D playerCollider = Physics2D.OverlapCircle(Detector.transform.position, playerCheckRadius, whatIsPlayer);
+			if (playerCollider != null) {
+				playerDetect = playerCollider.gameObject;
+			} else {
+				playerDetect = null;
+			}
 		}
 	}
 
@@ -75,5 +87,11 @@ bool isSitting = false;
 		float vY = sY / t + 0.5f * Mathf.Abs(Physics2D.gravity.y) * t;
 		
 		return new Vector2(vX,vY);
+	}
+	void OnDrawGizmosSelected() {
+		Gizmos.color = Color.blue;
+		if (detectPlayer) {
+			Gizmos.DrawWireSphere(this.transform.position, playerCheckRadius);
+		}
 	}
 }

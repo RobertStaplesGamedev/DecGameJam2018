@@ -25,8 +25,9 @@ public class Baroon : MonoBehaviour {
 
     void Start() {
         rb = this.GetComponent<Rigidbody2D>();
-        direction = new Vector2(xStartDirection * enemyScript.speed,yStartDirection * enemyScript.speed);
+        direction = new Vector2(xStartDirection * enemyScript.enemysettings.speed,yStartDirection * enemyScript.enemysettings.speed);
         rb.velocity = direction;
+
         DrawPatrolBox();
     }
 
@@ -44,7 +45,6 @@ public class Baroon : MonoBehaviour {
         RaycastHit2D frontHitInfo = Physics2D.Raycast(detector.position, direction, detectionDistanceFront);
         
         RaycastHit2D downHitInfo = Physics2D.Raycast(detector.position, Vector2.down, detectionDistanceDown);
-        //Debug.Log(rb.velocity);
         //Check if front hit detected anything
         if (frontHitInfo.transform != null && frontHitInfo.transform != this.transform && frontHitInfo.transform.gameObject.layer != 11 && frontHitInfo.transform.gameObject.layer != 10) {
             direction = new Vector2(-direction.x, direction.y);
@@ -63,8 +63,14 @@ public class Baroon : MonoBehaviour {
             }
         }
         //Keep moving on current trajectory
-        rb.velocity = direction;
-        //Debug.Log(rb.velocity);
+        if (!enemyScript.enemysettings.canBeDazed || (enemyScript.enemysettings.canBeDazed && enemyScript.enemysettings.dazeTimeCountdown < 0)) {
+            rb.MovePosition(rb.position + (direction * Time.fixedDeltaTime));
+            if (enemyScript.enemysettings.canBeDazed) {
+                enemyScript.enemysettings.isDazed = false;
+            }
+        } else if (enemyScript.enemysettings.canBeDazed && enemyScript.enemysettings.dazeTimeCountdown > 0) {
+            enemyScript.enemysettings.dazeTimeCountdown -= Time.fixedDeltaTime;
+        }
     }
 
     void Flip() {
